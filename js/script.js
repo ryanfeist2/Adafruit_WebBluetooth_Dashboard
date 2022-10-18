@@ -75,12 +75,18 @@ const boards = {
     hasSwitch: false,
     buttons: 1,
   },
+  XIAO_mBED_IMU_ToF: {
+  },
+  XIAO_mBED_RR122: {
+    hasSwitch: true,
+    buttons: 1,
+  },
   unknown: {
     colorOrder: 'GRB',
     neopixels: 1,
     hasSwitch: false,
     buttons: 1,
-  }
+  },
 }
 
 let panels = {
@@ -186,10 +192,10 @@ let panels = {
     measurementPeriod: 500,
   },
   buttons: {
-    serviceId: '0600',
-    characteristicId: '0601',
+    serviceId: '1000',
+    characteristicId: '1001',
     panelType: "custom",
-    structure: ['Uint32'],
+    structure: ['Uint8'],
     data: {buttonState:[]},
     properties: ['notify'],
     create: function(panelId) {
@@ -221,9 +227,9 @@ let panels = {
     serviceId: '0600',
     characteristicId: '0601',
     panelType: "custom",
-    structure: ['Uint32'],
+    structure: ['Uint8'],
     data: {buttonState:[]},
-    properties: [],
+    properties: ['write'],
     condition: function() {
       return currentBoard.hasSwitch;
     },
@@ -296,6 +302,76 @@ let panels = {
       return numeral(value).format('0.00') + ' rad';
     },
     measurementPeriod: 200,
+  },
+  medication_taken: {
+    serviceId: '0e00',
+    characteristicId: '0e01',
+    panelType: "text",
+    structure: ['Uint8'],
+    data: {data:[]},
+    properties: ['notify'],
+  },
+  lid_state: {
+    serviceId: '0e00',
+    characteristicId: '0e02',
+    panelType: "text",
+    structure: ['Uint8'],
+    data: {data:[]},
+    properties: ['notify'],
+    textFormat: function(value) {
+      if (value == 1){
+        return 'Off';
+      }
+      else{
+        return 'On';
+      }
+    },
+  },
+  Accelerometer: {
+    serviceId: '0f00',
+    characteristicId: '0f01',
+    panelType: "graph",
+    structure: ['Float32'],
+    data: {data:[]},
+    properties: ['notify'],
+    textFormat: function(value) {
+      return numeral(value).format('0.00');
+    },
+    //measurementPeriod: 500,
+  },
+  Gyro: {
+    serviceId: '0f00',
+    characteristicId: '0f02',
+    panelType: "graph",
+    structure: ['Float32'],
+    data: {data:[]},
+    properties: ['notify'],
+    textFormat: function(value) {
+      return numeral(value).format('0.00');
+    },
+    //measurementPeriod: 500,
+  },
+  ToF_mm: {
+    serviceId: '0f00',
+    characteristicId: '0f03',
+    panelType: "graph",
+    structure: ['Float32'],
+    data: {data:[]},
+    properties: ['notify'],
+    textFormat: function(value) {
+      return numeral(value).format('0.00');
+    },
+  },
+  ALS: {
+    serviceId: '0f00',
+    characteristicId: '0f04',
+    panelType: "graph",
+    structure: ['Float32'],
+    data: {data:[]},
+    properties: ['notify'],
+    textFormat: function(value) {
+      return numeral(value).format('0.00');
+    },
   },
 };
 
@@ -382,6 +458,7 @@ async function connect() {
     device.addEventListener('gattserverdisconnected', onDisconnected);
     let server = await device.gatt.connect();
     const availableServices = await server.getPrimaryServices();
+
 
     // Create the panels only if service available
     for (let panelId of Object.keys(panels)) {
@@ -503,7 +580,7 @@ async function disconnect() {
 
 function getFullId(shortId) {
   if (shortId.length == 4) {
-    return 'adaf' + shortId + '-c332-42a8-93bd-25e905756cb8';
+    return 'adaf' + shortId + '-c77f-47cb-9da3-e11b74151355';
   }
   return shortId;
 }
