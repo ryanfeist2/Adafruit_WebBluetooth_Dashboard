@@ -81,6 +81,10 @@ const boards = {
     hasSwitch: true,
     buttons: 1,
   },
+  XIAO_mBED_CapSense: {
+  },
+  XIAO_MAM_PIL: {
+  },
   unknown: {
     colorOrder: 'GRB',
     neopixels: 1,
@@ -229,7 +233,7 @@ let panels = {
     panelType: "custom",
     structure: ['Uint8'],
     data: {buttonState:[]},
-    properties: ['write'],
+    properties: ['write', 'read'],
     condition: function() {
       return currentBoard.hasSwitch;
     },
@@ -304,6 +308,7 @@ let panels = {
     measurementPeriod: 200,
   },
   medication_taken: {
+    title: 'Medication Taken',
     serviceId: '0e00',
     characteristicId: '0e01',
     panelType: "text",
@@ -312,6 +317,7 @@ let panels = {
     properties: ['notify'],
   },
   lid_state: {
+    title: 'Lid State',
     serviceId: '0e00',
     characteristicId: '0e02',
     panelType: "text",
@@ -328,6 +334,7 @@ let panels = {
     },
   },
   Accelerometer: {
+    title: 'Accelerometer',
     serviceId: '0f00',
     characteristicId: '0f01',
     panelType: "graph",
@@ -340,6 +347,7 @@ let panels = {
     //measurementPeriod: 500,
   },
   Gyro: {
+    title: 'Gyro',
     serviceId: '0f00',
     characteristicId: '0f02',
     panelType: "graph",
@@ -351,7 +359,8 @@ let panels = {
     },
     //measurementPeriod: 500,
   },
-  ToF_mm: {
+  ToF: {
+    title: 'ToF (mm)',
     serviceId: '0f00',
     characteristicId: '0f03',
     panelType: "graph",
@@ -363,6 +372,7 @@ let panels = {
     },
   },
   ALS: {
+    title: 'Ambient Light',
     serviceId: '0f00',
     characteristicId: '0f04',
     panelType: "graph",
@@ -372,6 +382,24 @@ let panels = {
     textFormat: function(value) {
       return numeral(value).format('0.00');
     },
+  },
+  Cap_Presense: {
+    title: 'Capacitive Presense',
+    serviceId: '1100',
+    characteristicId: '1101',
+    panelType: "text",
+    structure: ['Uint8'],
+    data: {data:[]},
+    properties: ['notify'],
+  },
+  Cap_Touch: {
+    title: 'Capacitive Touch',
+    serviceId: '1100',
+    characteristicId: '1102',
+    panelType: "text",
+    structure: ['Uint8'],
+    data: {data:[]},
+    properties: ['notify'],
   },
 };
 
